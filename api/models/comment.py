@@ -1,5 +1,26 @@
 from django.db import models
 
+from . import Review, User
+
 
 class Comment(models.Model):
-    pass
+    review = models.ForeignKey(Review,
+                               verbose_name='Отзыв',
+                               on_delete=models.CASCADE,
+                               related_name='comments')
+    text = models.TextField(verbose_name='Текст')
+    author = models.ForeignKey(User,
+                               verbose_name='Комментатор',
+                               on_delete=models.CASCADE,
+                               related_name='comments')
+    pub_date = models.DateTimeField(verbose_name='Дата публикации',
+                                    auto_now_add=True,
+                                    db_index=True)
+
+    class Meta:
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
+        ordering = ['-pub_date']
+
+    def __str__(self):
+        return self.text[:15]
