@@ -6,7 +6,7 @@ from ..models import Category
 from ..serializers import CategorySerializer
 
 
-class CategoriesViewSet(viewsets.ModelViewSet):
+class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     lookup_field = 'slug'
     serializer_class = CategorySerializer
