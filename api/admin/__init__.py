@@ -1,5 +1,8 @@
-from .title_admin import Title
+from .category_admin import Category
+from .comment_admin import Comment
 from .genre_admin import Genre
 from .review_admin import Review
-from .comment_admin import Comment
-from .category_admin import Category
+from .title_admin import Title
+
+
+__all__ = ['Category', 'Comment', 'Genre', 'Review', 'Title',]
