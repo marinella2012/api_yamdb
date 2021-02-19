@@ -2,23 +2,23 @@ from rest_framework import serializers
 from statistics import mean
 from django.shortcuts import get_object_or_404
 
-from ..models import Genre, Title
+from ..models import Title, Genre
 from .category_serializer import CategorySerializer
 from .genre_serializer import GenreSerializer
 
 
 class TitleSerializer(serializers.ModelSerializer):
-    category = serializers.CategorySerializer()
+    category = CategorySerializer()
     rating = serializers.SerializerMethodField()
-    genre = serializers.GenreSerializer(many=True)
+    genre = GenreSerializer(many=True)
 
     class Meta:
         model = Title
         fields = '__all__'
 
     def get_rating(self, obj):
-        scores_list = obj.reviews.all().values_list('score', flat=True)
-        return mean(scores_list)
+        scores_list = obj.reviews.values_list('score', flat=True)
+        return mean(scores_list) if scores_list else None
 
     def create(self, validated_data):
         genres_data = validated_data.pop('genre')
