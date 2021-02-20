@@ -3,21 +3,28 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    USER_ROLE_CHOICES = (
-        (1, 'user'),
-        (2, 'moderator'),
-        (3, 'admin'),
-    )
+
+    class Role(models.TextChoices):
+        USER = 'user'
+        MODERATOR = 'moderator'
+        ADMIN = 'admin'
 
     email = models.EmailField(
         verbose_name='email address',
         max_length=255,
         unique=True,
     )
-    role = models.PositiveSmallIntegerField(
-        choices=USER_ROLE_CHOICES,
-        blank=True,
-        null=True,
+    username = models.CharField(
+        max_length=30,
+        unique=True,
+        verbose_name='username',
+        null=True
+    )
+    role = models.CharField(
+        max_length=10,
+        verbose_name='user role',
+        choices=Role.choices,
+        default=Role.USER
     )
     bio = models.TextField(blank=True)
 

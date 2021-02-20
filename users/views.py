@@ -1,14 +1,19 @@
 import os
+import random
+import string
+
+from django.core.mail import send_mail
 from dotenv import load_dotenv
+from rest_framework import status
+from rest_framework import viewsets, permissions
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
-from django.core.mail import send_mail
-import string
-import random
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import Buffer, User
+from .permissions import IsAdministrator
+from .serializers import UserSerializer
+from .viewsets import RetrieveUpdateViewSet
 
 
 def code_gen(size=8, chars=string.ascii_uppercase + string.digits):
@@ -19,7 +24,7 @@ load_dotenv()
 
 
 @api_view(['POST'])
-def SendCode(request):
+def send_code(request):
     email_from = os.getenv('EMAIL_HOST_USER')
     email_to = request.GET.get('email')
     code = code_gen()
@@ -40,7 +45,7 @@ def SendCode(request):
 
 
 @api_view(['POST'])
-def SendToken(request):
+def send_token(request):
     try:
         request_email = request.GET.get('email')
         request_code = request.GET.get('confirmation_code')
@@ -56,3 +61,18 @@ def SendToken(request):
         refresh = RefreshToken.for_user(new_user)
         return Response({"token": str(refresh.access_token)}, status=status.HTTP_200_OK)
     return Response({"error": "wrong code"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAdministrator]
+
+
+class MeViewSet(RetrieveUpdateViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user

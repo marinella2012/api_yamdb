@@ -2,15 +2,16 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 
-from users.views import SendCode, SendToken
+from users.views import send_code, send_token, UserViewSet, MeViewSet
 
 
 router = DefaultRouter()
-#router.register('', , basename='')
+router.register('users/me', MeViewSet)
+router.register('users', UserViewSet)
 
 
 urlpatterns = [
-    path('v1/auth/email/', SendCode),
-    path('v1/auth/token/', SendToken),
-    path('v1/users/', include(router.urls)),
+    path('v1/auth/email/', send_code),
+    path('v1/auth/token/', send_token),
+    path('v1/', include(router.urls)),
 ]
