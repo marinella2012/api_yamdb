@@ -8,7 +8,7 @@ import string
 import random
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import Buffer
+from .models import Buffer, User
 
 
 def code_gen(size=8, chars=string.ascii_uppercase + string.digits):
@@ -48,6 +48,11 @@ def SendToken(request):
     except Buffer.DoesNotExist:
         return Response({"error": "wrong email"}, status=status.HTTP_400_BAD_REQUEST)
     if request_code == current_user.code:
-        refresh = RefreshToken.for_user(current_user)
+        try:
+            new_user = User.objects.get(email=request_email)
+        except User.DoesNotExist:
+            new_user = User.objects.create(email=request_email)
+        current_user.delete()
+        refresh = RefreshToken.for_user(new_user)
         return Response({"token": str(refresh.access_token)}, status=status.HTTP_200_OK)
     return Response({"error": "wrong code"}, status=status.HTTP_400_BAD_REQUEST)

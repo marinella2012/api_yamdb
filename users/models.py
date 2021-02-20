@@ -14,7 +14,11 @@ class User(AbstractUser):
         max_length=255,
         unique=True,
     )
-    role = models.PositiveSmallIntegerField(choices=USER_ROLE_CHOICES)
+    role = models.PositiveSmallIntegerField(
+        choices=USER_ROLE_CHOICES,
+        blank=True,
+        null=True,
+    )
     bio = models.TextField(blank=True)
 
     USERNAME_FIELD = 'email'
