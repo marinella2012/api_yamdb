@@ -5,4 +5,6 @@ from ..models import Title
 
 @admin.register(Title)
 class TitleAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('name', 'year', 'category', 'description')
+    list_filter = ('year', )
+    search_fields = ('name', 'year', 'category')

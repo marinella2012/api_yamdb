@@ -5,4 +5,6 @@ from ..models import Genre
 
 @admin.register(Genre)
 class GenreAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('name', 'slug', 'title')
+    list_filter = ('name', )
+    search_fields = ('name', 'slug', 'title')

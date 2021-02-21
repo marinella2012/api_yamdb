@@ -5,4 +5,6 @@ from ..models import Category
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('name', 'slug')
+    list_filter = ('name',)
+    search_fields = ('name', 'slug')
