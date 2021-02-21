@@ -8,10 +8,10 @@ class Genre(models.Model):
     slug = models.SlugField(unique=True)
     title = models.ManyToManyField(Title)
 
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['title'], name='unique_title'),
-        ]
+   # class Meta:
+   #      constraints = [
+   #          models.UniqueConstraint(fields=['title'], name='unique_title'),
+   #      ]
 
     def __str__(self):
         return self.slug
