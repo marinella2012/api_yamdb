@@ -9,11 +9,13 @@ from rest_framework import viewsets, permissions
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.decorators import action
+from rest_framework.pagination import PageNumberPagination
+
 
 from .models import Buffer, User
 from .permissions import IsAdministrator
 from .serializers import UserSerializer
-from .viewsets import RetrieveUpdateViewSet
 
 
 def code_gen(size=8, chars=string.ascii_uppercase + string.digits):
@@ -56,7 +58,9 @@ def send_token(request):
         try:
             new_user = User.objects.get(email=request_email)
         except User.DoesNotExist:
-            new_user = User.objects.create(email=request_email)
+            serialized = UserSerializer(data=request.DATA)
+            if serialized.is_valid():
+                User.objects.create_user(**serialized.init_data)
         current_user.delete()
         refresh = RefreshToken.for_user(new_user)
         return Response({"token": str(refresh.access_token)}, status=status.HTTP_200_OK)
@@ -66,13 +70,19 @@ def send_token(request):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsAdministrator]
+    lookup_field = 'username'
+    permission_classes = [IsAdministrator, permissions.IsAdminUser]
+    pagination_class = PageNumberPagination
 
-
-class MeViewSet(RetrieveUpdateViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_object(self):
-        return self.request.user
+    @action(detail=False, permission_classes=(permissions.IsAuthenticated,),
+            methods=['get', 'patch'], url_path='me')
+    def get_or_update_self(self, request):
+        if request.method == 'PATCH':
+            serializer = self.get_serializer(
+                instance=request.user, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            serializer = self.get_serializer(request.user, many=False)
+            return Response(serializer.data)
