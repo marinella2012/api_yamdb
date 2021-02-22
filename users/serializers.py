@@ -4,10 +4,8 @@ from .models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
-    username = serializers.SlugRelatedField(
-        queryset=User.objects.all(),
-        many=False,
-        slug_field='username'
+    role = serializers.CharField(
+        read_only=False,
     )
 
     class Meta:
