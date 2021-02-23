@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 
+from ..models.title import Title
 from ..serializers.title_serializer import TitleSerializer
-from ..models import Title
 
 
 class TitleViewSet(viewsets.ModelViewSet):
@@ -14,4 +14,3 @@ class TitleViewSet(viewsets.ModelViewSet):
     #     if self.action in ('create', 'partial_update'):
     #         return TitleSlugSerializer
     #     return TitleSerializer
-

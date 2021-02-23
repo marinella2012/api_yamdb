@@ -1,6 +1,7 @@
-from rest_framework import serializers
 from statistics import mean
+
 from django.shortcuts import get_object_or_404
+from rest_framework import serializers
 
 from ..models import Genre, Title
 from .category_serializer import CategorySerializer

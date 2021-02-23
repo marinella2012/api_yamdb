@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser, UserManager
+from django.db import models
 
 
 class User(AbstractUser):
@@ -32,7 +32,7 @@ class User(AbstractUser):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['username']
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)

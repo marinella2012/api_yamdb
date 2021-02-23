@@ -2,8 +2,8 @@
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 
-from ..models import Category
-from ..serializers import CategorySerializer
+from ..models.category import Category
+from ..serializers.category_serializer import CategorySerializer
 
 
 class CategoryViewSet(viewsets.ModelViewSet):

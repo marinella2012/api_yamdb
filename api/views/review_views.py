@@ -1,10 +1,10 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets, permissions
+from rest_framework import permissions, viewsets
 
+from users.permissions import IsAdministrator, IsAuthor, IsModerator
 
-from ..models import Title
-from ..serializers import ReviewSerializer
-from users.permissions import IsAuthor, IsAdministrator, IsModerator
+from ..models.title import Title
+from ..serializers.review_serializer import ReviewSerializer
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
