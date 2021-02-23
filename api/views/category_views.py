@@ -1,20 +1,18 @@
+from rest_framework import filters, viewsets, mixins
 
-from rest_framework import status, viewsets
-from rest_framework.response import Response
-
-from ..models import Category
-from ..serializers import CategorySerializer
+from ..models.category import Category
+from ..serializers.category_serializer import CategorySerializer
+from users.permissions import IsAdministratorOrReadOnly
 
 
-class CategoryViewSet(viewsets.ModelViewSet):
+class CategoryViewSet(mixins.ListModelMixin,
+                      mixins.CreateModelMixin,
+                      mixins.DestroyModelMixin,
+                      viewsets.GenericViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = []
+    permission_classes = [IsAdministratorOrReadOnly]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name', ]
+    lookup_field = 'slug'
 
-    search_fields = ('name',)
-
-    def retrieve(self):
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    def update(self):
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)

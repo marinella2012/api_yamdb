@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, UserManager
 
 
 class User(AbstractUser):
@@ -18,7 +18,8 @@ class User(AbstractUser):
         max_length=30,
         unique=True,
         verbose_name='username',
-        null=True
+        null=True,
+        blank=True,
     )
     role = models.CharField(
         max_length=10,
@@ -28,8 +29,13 @@ class User(AbstractUser):
     )
     bio = models.TextField(blank=True)
 
+    objects = UserManager()
+
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['username']
+
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
 
 
 class Buffer(models.Model):

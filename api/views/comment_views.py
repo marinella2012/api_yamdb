@@ -1,15 +1,16 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, status
+from rest_framework.response import Response
 
-from ..models import Review
-from ..serializers import CommentSerializer
-from users.permissions import IsAuthor, IsAdministrator, IsModerator
+from ..models.review import Review
+from ..serializers.comment_serializer import CommentSerializer
+from users.permissions import IsAuthorOrReadOnly, IsAdministrator, IsModerator
 
 
 class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly
-                          & IsAuthor
+                          & IsAuthorOrReadOnly
                           | IsModerator
                           | IsAdministrator]
 
@@ -23,5 +24,9 @@ class CommentViewSet(viewsets.ModelViewSet):
         review = get_object_or_404(Review,
                                    title__id=self.kwargs.get('title_id'),
                                    id=self.kwargs.get('review_id'))
-        serializer.save(author=self.request.user,
-                        review=review)
+        if self.request.user.is_authenticated:
+            serializer.save(author=self.request.user,
+                            review=review)
+
+    def update(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
