@@ -71,7 +71,7 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     lookup_field = 'username'
-    permission_classes = [IsAdministrator, permissions.IsAdminUser]
+    permission_classes = [IsAdministrator]
     pagination_class = PageNumberPagination
 
     @action(detail=False, permission_classes=(permissions.IsAuthenticated,),
