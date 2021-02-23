@@ -10,8 +10,8 @@ from .genre_serializer import GenreSerializer
 
 
 class TitleSerializer(serializers.ModelSerializer):
-    genre = GenreSerializer(many=True, read_only=True)
-    category = CategorySerializer()
+    # genre = GenreSerializer(many=True, read_only=True)
+    # category = CategorySerializer()
     rating = serializers.SerializerMethodField(allow_null=True)
 
     class Meta:
@@ -44,3 +44,14 @@ class TitleSerializer(serializers.ModelSerializer):
             title.genre_set.add(genre)
         title.save()
         return title
+
+    # def to_representation(self, instance):
+    #     return {
+    #         'id': instance.id,
+    #         'name': instance.name,
+    #         'year': instance.year,
+    #         'rating': self.get_rating(instance),
+    #         'description': instance.description,
+    #         'genre': self.genre,
+    #         'category': CategorySerializer(instance=instance.category)
+    #     }
