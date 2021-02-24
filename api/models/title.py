@@ -1,11 +1,14 @@
 from django.db import models
 
 from .category import Category
+from .genre import Genre
 
 
 class Title(models.Model):
-    name = models.TextField(max_length=50)
-    year = models.PositiveIntegerField('Год выпуска')
+    name = models.CharField(max_length=50)
+    year = models.PositiveIntegerField('Год выпуска',
+                                       null=True,
+                                       blank=True)
     description = models.TextField(max_length=200, null=True, blank=True)
     category = models.ForeignKey(
         Category,
@@ -14,6 +17,9 @@ class Title(models.Model):
         null=True,
         blank=True
     )
+    genre = models.ManyToManyField(Genre,
+                                   db_table='genre_title',
+                                   blank=True)
 
     class Meta:
         ordering = ['-year']

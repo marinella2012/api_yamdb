@@ -1,10 +1,10 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets, permissions, status
-from rest_framework.response import Response
+from rest_framework import viewsets, permissions
 
 from ..models.title import Title
 from ..serializers.review_serializer import ReviewSerializer
-from users.permissions import (IsAuthorOrReadOnly, IsAdministratorOrReadOnly,
+from users.permissions import (IsAuthorOrReadOnly,
+                               IsAdministratorOrReadOnly,
                                IsModerator)
 
 
@@ -25,5 +25,10 @@ class ReviewViewSet(viewsets.ModelViewSet):
             serializer.save(author=self.request.user,
                             title=title)
 
-    def update(self, request, *args, **kwargs):
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    def get_serializer_context(self):
+        context = super(ReviewViewSet, self).get_serializer_context()
+        context.update({
+            'title_id': self.kwargs.get('title_id'),
+            'author_id': self.request.user.id
+        })
+        return context

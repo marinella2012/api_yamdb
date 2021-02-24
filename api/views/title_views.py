@@ -12,7 +12,7 @@ class TitleViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAdministratorOrReadOnly]
     serializer_class = TitleSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['category__slug', 'genre__slug', 'name', 'year']
+    filterset_fields = ['category', 'genre', 'name', 'year']
 
-    def update(self, request, *args, **kwargs):
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    # def update(self, request, *args, **kwargs):
+    #     return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)

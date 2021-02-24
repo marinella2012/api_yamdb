@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 
 from .title import Title
 
@@ -23,6 +24,17 @@ class Review(models.Model):
         verbose_name = 'Отзыв'
         verbose_name_plural = 'Отзывы'
         ordering = ['-pub_date']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['title', 'author'],
+                name='unique_review'
+            )
+        ]
 
     def __str__(self):
         return self.text[:15]
+
+    def validate_score(self):
+        if self.score not in range(1, 10):
+            raise ValidationError('score be from 1 to 10')
+        return self.score
