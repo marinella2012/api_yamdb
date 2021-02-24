@@ -1,8 +1,8 @@
 from rest_framework import filters, viewsets, mixins
 
+from users.permissions import IsAdministratorOrReadOnly
 from ..models.genre import Genre
 from ..serializers.genre_serializer import GenreSerializer
-from users.permissions import IsAdministratorOrReadOnly
 
 
 class GenreViewSet(mixins.ListModelMixin,

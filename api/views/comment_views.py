@@ -3,15 +3,13 @@ from rest_framework import viewsets, permissions
 
 from ..models.review import Review
 from ..serializers.comment_serializer import CommentSerializer
-from users.permissions import IsAuthorOrReadOnly, IsAdministrator, IsModerator
+from users.permissions import IsAuthorOrModerOrAdminOrReadOnly
 
 
 class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly
-                          | IsAuthorOrReadOnly
-                          | IsModerator
-                          | IsAdministrator]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
+                          IsAuthorOrModerOrAdminOrReadOnly]
 
     def get_queryset(self):
         review = get_object_or_404(Review,
@@ -26,6 +24,3 @@ class CommentViewSet(viewsets.ModelViewSet):
         if self.request.user.is_authenticated:
             serializer.save(author=self.request.user,
                             review=review)
-
-    # def update(self, request, *args, **kwargs):
-    #     return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)

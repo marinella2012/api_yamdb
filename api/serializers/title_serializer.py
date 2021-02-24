@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from django.shortcuts import get_object_or_404
 import statistics
 
 from ..models.category import Category
@@ -28,8 +27,6 @@ class TitleSerializer(serializers.ModelSerializer):
     def to_internal_value(self, data):
         genre_slug_list = data.get('genre')
         category_slug = data.get('category')
-        if not data.get('name'):
-            raise serializers.ValidationError('name is required')
         return {'name': data.get('name'),
                 'year': data.get('year'),
                 'description': data.get('description'),

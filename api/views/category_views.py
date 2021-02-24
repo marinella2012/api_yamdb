@@ -1,8 +1,8 @@
 from rest_framework import filters, viewsets, mixins
 
+from users.permissions import IsAdministratorOrReadOnly
 from ..models.category import Category
 from ..serializers.category_serializer import CategorySerializer
-from users.permissions import IsAdministratorOrReadOnly
 
 
 class CategoryViewSet(mixins.ListModelMixin,
@@ -15,4 +15,3 @@ class CategoryViewSet(mixins.ListModelMixin,
     filter_backends = [filters.SearchFilter]
     search_fields = ['name', ]
     lookup_field = 'slug'
-
