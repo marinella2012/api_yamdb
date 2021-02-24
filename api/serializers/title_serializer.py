@@ -4,8 +4,8 @@ import statistics
 from ..models.category import Category
 from ..models.genre import Genre
 from ..models.title import Title
-from .category_serializer import CategorySerializer
 from .genre_serializer import GenreSerializer
+from .category_serializer import CategorySerializer
 
 
 class TitleSerializer(serializers.ModelSerializer):
@@ -22,28 +22,40 @@ class TitleSerializer(serializers.ModelSerializer):
             scores = obj.reviews.all().values_list('score', flat=True)
             avg = statistics.fmean(scores)
             return avg
-        return 'None'
+        return None
 
     def to_internal_value(self, data):
-        genre_slug_list = data.get('genre')
-        category_slug = data.get('category')
-        return {'name': data.get('name'),
-                'year': data.get('year'),
-                'description': data.get('description'),
-                'genre': genre_slug_list,
-                'category': category_slug}
+        try:
+            genre_slug_list = data.get('genre')
+            name = data['name']
+            return {'name': name,
+                    'year': data.get('year'),
+                    'description': data.get('description'),
+                    'genre': genre_slug_list,
+                    'category': data.get('category')}
+        except KeyError:
+            raise serializers.ValidationError({'name': 'field is required'},
+                                              code='invalid')
 
     def create(self, validated_data):
-        category_slug = validated_data.get('category')
-        category = None
-        if Category.objects.filter(slug=category_slug).exists():
-            category = Category.objects.get(slug=category_slug)
-        title = Title.objects.create(
-            category=category,
-            name=validated_data.get('name'),
-            year=validated_data.get('year'),
-            description=validated_data.get('description')
-        )
+        if Category.objects.filter(
+                slug=validated_data.get('category')
+        ).exists():
+            category = Category.objects.get(
+                slug=validated_data.get('category')
+            )
+            title = Title.objects.create(
+                category=category,
+                name=validated_data.get('name'),
+                year=validated_data.get('year'),
+                description=validated_data.get('description')
+            )
+        else:
+            title = Title.objects.create(
+                name=validated_data.get('name'),
+                year=validated_data.get('year'),
+                description=validated_data.get('description')
+            )
         slugs = validated_data.get('genre')
         if slugs:
             for slug in slugs:
