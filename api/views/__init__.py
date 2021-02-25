@@ -6,4 +6,5 @@ from .title_views import TitleViewSet
 
 
 __all__ = ['CategoryViewSet', 'CommentViewSet', 'GenreViewSet',
-           'ReviewViewSet', 'TitleViewSet',]
+           'ReviewViewSet', 'TitleViewSet', ]
+
