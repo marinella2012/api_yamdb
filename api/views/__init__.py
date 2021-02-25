@@ -5,4 +5,4 @@ from .review_views import ReviewViewSet
 from .title_views import TitleViewSet
 
 __all__ = ['CategoryViewSet', 'CommentViewSet', 'GenreViewSet',
-           'ReviewViewSet', 'TitleViewSet',]
+           'ReviewViewSet', 'TitleViewSet', ]

@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
+from django.contrib.auth.models import AbstractUser, UserManager
 
 
 class User(AbstractUser):
@@ -36,6 +37,9 @@ class User(AbstractUser):
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['-pk']
 
 
 class Buffer(models.Model):

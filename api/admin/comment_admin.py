@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from ..models import Comment
+from ..models.comment import Comment
 
 
 @admin.register(Comment)
