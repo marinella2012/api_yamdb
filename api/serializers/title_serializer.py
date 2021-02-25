@@ -1,5 +1,4 @@
-import statistics
-
+from django.db.models import Avg
 from rest_framework import serializers
 
 from .category_serializer import CategorySerializer
@@ -20,9 +19,7 @@ class TitleViewSerializer(serializers.ModelSerializer):
 
     def get_rating(self, obj):
         if obj.reviews.all().exists():
-            scores = obj.reviews.all().values_list('score', flat=True)
-            avg = statistics.fmean(scores)
-            return avg
+            return obj.reviews.all().aggregate(Avg('score'))['score__avg']
         return None
 
 
