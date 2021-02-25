@@ -1,20 +1,17 @@
-from rest_framework import filters, status, viewsets
-from rest_framework.response import Response
+from rest_framework import filters, viewsets, mixins
 
-from ..models import Genre
-from ..serializers import GenreSerializer
+from users.permissions import IsAdministratorOrReadOnly
+from ..models.genre import Genre
+from ..serializers.genre_serializer import GenreSerializer
 
 
-class GenreViewSet(viewsets.ModelViewSet):
+class GenreViewSet(mixins.ListModelMixin,
+                   mixins.CreateModelMixin,
+                   mixins.DestroyModelMixin,
+                   viewsets.GenericViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
-    permission_classes = []
-
+    permission_classes = [IsAdministratorOrReadOnly]
+    lookup_field = 'slug'
     filter_backends = [filters.SearchFilter]
     search_fields = ('name',)
-
-    def retrieve(self):
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    def update(self):
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)

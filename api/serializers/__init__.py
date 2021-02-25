@@ -6,4 +6,4 @@ from .title_serializer import Title as TitleSerializer
 
 
 __all__ = ['CommentSerializer', 'CategorySerializer', 'GenreSerializer',
-           'ReviewSerializer', 'TitleSerializer',]
+           'ReviewSerializer', 'TitleSerializer', ]
