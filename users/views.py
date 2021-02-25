@@ -6,12 +6,11 @@ from django.core.mail import send_mail
 from dotenv import load_dotenv
 from rest_framework import status
 from rest_framework import viewsets, permissions
+from rest_framework.decorators import action
 from rest_framework.decorators import api_view
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.decorators import action
-from rest_framework.pagination import PageNumberPagination
-
 
 from .models import Buffer, User
 from .permissions import IsAdministrator
@@ -43,7 +42,7 @@ def send_code(request):
         recipient_list=[email_to, ],
         fail_silently=False,
     )
-    return Response({"email": email_to}, status=status.HTTP_200_OK)
+    return Response({'email': email_to}, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
@@ -53,15 +52,15 @@ def send_token(request):
         request_code = request.data.get('confirmation_code')
         current_user = Buffer.objects.get(email=request_email)
     except Buffer.DoesNotExist:
-        return Response({"error": "wrong email"},
+        return Response({'error': 'wrong email'},
                         status=status.HTTP_400_BAD_REQUEST)
     if request_code == current_user.code:
         new_user, _ = User.objects.get_or_create(email=request_email)
         current_user.delete()
         refresh = RefreshToken.for_user(new_user)
-        return Response({"token": str(refresh.access_token)},
+        return Response({'token': str(refresh.access_token)},
                         status=status.HTTP_200_OK)
-    return Response({"error": "wrong code"},
+    return Response({'error': 'wrong code'},
                     status=status.HTTP_400_BAD_REQUEST)
 
 

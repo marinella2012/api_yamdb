@@ -38,7 +38,7 @@ class User(AbstractUser):
     is_admin = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ['-id']
+        ordering = ['-pk']
 
 
 class Buffer(models.Model):

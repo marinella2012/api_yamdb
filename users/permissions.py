@@ -19,13 +19,6 @@ class IsAdministratorOrReadOnly(permissions.BasePermission):
                      request.user.is_staff))
 
 
-class IsModerator(permissions.BasePermission):
-    def has_permission(self, request, view):
-        return bool(request.user and
-                    request.user.is_authenticated and
-                    request.user.role == 'moderator')
-
-
 class IsAuthorOrModerOrAdminOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.method in ['PATCH', 'DELETE']:

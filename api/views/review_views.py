@@ -1,9 +1,9 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, permissions
 
+from users.permissions import IsAuthorOrModerOrAdminOrReadOnly
 from ..models.title import Title
 from ..serializers.review_serializer import ReviewSerializer
-from users.permissions import IsAuthorOrModerOrAdminOrReadOnly
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
