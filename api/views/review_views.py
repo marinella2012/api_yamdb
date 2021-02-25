@@ -27,4 +27,6 @@ class ReviewViewSet(viewsets.ModelViewSet):
             'title_id': self.kwargs.get('title_id'),
             'author_id': self.request.user.id
         })
+        if self.request.method == 'PATCH':
+            context.update({'method': 'patch'})
         return context
