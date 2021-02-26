@@ -11,16 +11,10 @@ from ..models.title import Title
 class TitleViewSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
     genre = GenreSerializer(many=True, read_only=True)
-    rating = serializers.SerializerMethodField(allow_null=True)
 
     class Meta:
         model = Title
         fields = '__all__'
-
-    def get_rating(self, obj):
-        if obj.reviews.all().exists():
-            return obj.reviews.all().aggregate(Avg('score'))['score__avg']
-        return None
 
 
 class TitleCreateSerializer(serializers.ModelSerializer):
