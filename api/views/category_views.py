@@ -4,11 +4,6 @@ from users.permissions import IsAdministratorOrReadOnly
 from ..models.category import Category
 from ..serializers.category_serializer import CategorySerializer
 
-<<<<<<< HEAD
-from ..models.category import Category
-from ..serializers.category_serializer import CategorySerializer
-=======
->>>>>>> master
 
 class CategoryViewSet(mixins.ListModelMixin,
                       mixins.CreateModelMixin,

@@ -55,16 +55,7 @@ def send_token(request):
         return Response({'error': 'wrong email'},
                         status=status.HTTP_400_BAD_REQUEST)
     if request_code == current_user.code:
-<<<<<<< HEAD
-        try:
-            new_user = User.objects.get(email=request_email)
-        except User.DoesNotExist:
-            serialized = UserSerializer(data=request.DATA)
-            if serialized.is_valid():
-                User.objects.create_user(**serialized.init_data)
-=======
         new_user, _ = User.objects.get_or_create(email=request_email)
->>>>>>> master
         current_user.delete()
         refresh = RefreshToken.for_user(new_user)
         return Response({'token': str(refresh.access_token)},

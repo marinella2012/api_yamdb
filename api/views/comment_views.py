@@ -1,12 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import permissions, viewsets
 
-<<<<<<< HEAD
-from users.permissions import IsAdministrator, IsAuthor, IsModerator
-
-=======
 from users.permissions import IsAuthorOrModerOrAdminOrReadOnly
->>>>>>> master
 from ..models.review import Review
 from ..serializers.comment_serializer import CommentSerializer
 
