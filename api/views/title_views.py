@@ -3,10 +3,11 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 
 from users.permissions import IsAdministratorOrReadOnly
+
 from ..filters import TitleFilter
 from ..models.title import Title
-from ..serializers.title_serializer import (TitleViewSerializer,
-                                            TitleCreateSerializer)
+from ..serializers.title_serializer import (TitleCreateSerializer,
+                                            TitleViewSerializer)
 
 
 class TitleViewSet(viewsets.ModelViewSet):

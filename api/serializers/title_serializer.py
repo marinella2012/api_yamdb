@@ -1,11 +1,11 @@
 from django.db.models import Avg
 from rest_framework import serializers
 
-from .category_serializer import CategorySerializer
-from .genre_serializer import GenreSerializer
 from ..models.category import Category
 from ..models.genre import Genre
 from ..models.title import Title
+from .category_serializer import CategorySerializer
+from .genre_serializer import GenreSerializer
 
 
 class TitleViewSerializer(serializers.ModelSerializer):

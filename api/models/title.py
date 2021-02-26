@@ -5,7 +5,10 @@ from .genre import Genre
 
 
 class Title(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(
+        max_length=50,
+        verbose_name='Произведение'
+    )
     year = models.PositiveIntegerField('Год выпуска',
                                        null=True,
                                        blank=True)

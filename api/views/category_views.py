@@ -1,14 +1,12 @@
-from rest_framework import filters, viewsets, mixins
+from rest_framework import filters
 
 from users.permissions import IsAdministratorOrReadOnly
+from .genre_views import CreateListViewDelSet
 from ..models.category import Category
 from ..serializers.category_serializer import CategorySerializer
 
 
-class CategoryViewSet(mixins.ListModelMixin,
-                      mixins.CreateModelMixin,
-                      mixins.DestroyModelMixin,
-                      viewsets.GenericViewSet):
+class CategoryViewSet(CreateListViewDelSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [IsAdministratorOrReadOnly]
