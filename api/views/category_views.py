@@ -1,9 +1,18 @@
-from rest_framework import filters
+from rest_framework import filters, mixins, viewsets
 
 from users.permissions import IsAdministratorOrReadOnly
-from .genre_views import CreateListViewDelSet
+
 from ..models.category import Category
 from ..serializers.category_serializer import CategorySerializer
+
+
+class CreateListViewDelSet(
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    mixins.DestroyModelMixin,
+    viewsets.GenericViewSet
+):
+    pass
 
 
 class CategoryViewSet(CreateListViewDelSet):

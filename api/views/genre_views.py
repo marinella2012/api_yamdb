@@ -1,18 +1,10 @@
-from rest_framework import filters, mixins, viewsets
+from rest_framework import filters
 
 from users.permissions import IsAdministratorOrReadOnly
 
 from ..models.genre import Genre
 from ..serializers.genre_serializer import GenreSerializer
-
-
-class CreateListViewDelSet(
-    mixins.CreateModelMixin,
-    mixins.ListModelMixin,
-    mixins.DestroyModelMixin,
-    viewsets.GenericViewSet
-):
-    pass
+from .category_views import CreateListViewDelSet
 
 
 class GenreViewSet(CreateListViewDelSet):
