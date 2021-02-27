@@ -35,7 +35,7 @@ class Title(models.Model):
                                    blank=True)
 
     class Meta:
-        ordering = ('-category', '-id')
+        ordering = ['-id']
 
     def __str__(self):
         return self.name

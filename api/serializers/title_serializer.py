@@ -10,6 +10,7 @@ from .genre_serializer import GenreSerializer
 class TitleViewSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
     genre = GenreSerializer(many=True, read_only=True)
+    rating = serializers.FloatField(min_value=0, max_value=10)
 
     class Meta:
         model = Title
