@@ -4,5 +4,4 @@ from .genre_admin import Genre
 from .review_admin import Review
 from .title_admin import Title
 
-
-__all__ = ['Category', 'Comment', 'Genre', 'Review', 'Title',]
+__all__ = ['Category', 'Comment', 'Genre', 'Review', 'Title', ]

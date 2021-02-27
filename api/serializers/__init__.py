@@ -4,6 +4,5 @@ from .genre_serializer import Genre as GenreSerializer
 from .review_serializer import Review as ReviewSerializer
 from .title_serializer import Title as TitleSerializer
 
-
 __all__ = ['CommentSerializer', 'CategorySerializer', 'GenreSerializer',
-           'ReviewSerializer', 'TitleSerializer',]
+           'ReviewSerializer', 'TitleSerializer', ]

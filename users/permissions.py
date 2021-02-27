@@ -3,19 +3,23 @@ from rest_framework import permissions
 
 class IsAdministrator(permissions.BasePermission):
     def has_permission(self, request, view):
-        return bool(request.user.is_authenticated and
-                    request.user.role == 'admin' or
-                    request.user.is_staff)
+        return (request.user and request.user.is_authenticated and
+                (request.user.is_admin or request.user.is_staff))
 
 
-class IsModerator(permissions.BasePermission):
+class IsAdministratorOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
-        return bool(request.user.is_authenticated and
-                    request.user.role == 'moderator')
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return (request.user and request.user.is_authenticated and
+                (request.user.is_admin or request.user.is_staff))
 
 
-class IsAuthor(permissions.BasePermission):
+class IsAuthorOrModerOrAdminOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        if request.method in ('PATCH', 'DELETE'):
-            return request.user == obj.author
+        if request.method in ['PATCH', 'DELETE']:
+            return (request.user and request.user.is_authenticated and
+                    (request.user == obj.author
+                     or request.user.is_moderator
+                     or request.user.is_admin))
         return True

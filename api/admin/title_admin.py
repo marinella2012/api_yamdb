@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from ..models import Title
+from ..models.title import Title
 
 
 @admin.register(Title)
