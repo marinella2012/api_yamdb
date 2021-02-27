@@ -27,7 +27,10 @@ class User(AbstractUser):
         choices=Role.choices,
         default=Role.USER
     )
-    bio = models.TextField(blank=True)
+    bio = models.TextField(
+        blank=True,
+        verbose_name='user bio',
+    )
 
     objects = UserManager()
 
@@ -35,10 +38,17 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ['username']
 
     is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-pk']
+
+    @property
+    def is_admin(self):
+        return self.role == User.Role.ADMIN
+
+    @property
+    def is_moderator(self):
+        return self.role == User.Role.MODERATOR
 
 
 class Buffer(models.Model):
@@ -47,4 +57,7 @@ class Buffer(models.Model):
         max_length=255,
         unique=True,
     )
-    code = models.CharField(max_length=8)
+    code = models.CharField(
+        max_length=8,
+        verbose_name='confirmation code',
+    )
