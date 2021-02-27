@@ -25,9 +25,6 @@ class Title(models.Model):
                                    blank=True)
 
     class Meta:
-        ordering = ['-year']
-
-    class Meta:
         ordering = ('-category', '-id')
 
     def __str__(self):
