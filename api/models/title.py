@@ -5,7 +5,10 @@ from .genre import Genre
 
 
 class Title(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(
+        max_length=50,
+        verbose_name='Произведение'
+    )
     year = models.PositiveIntegerField('Год выпуска',
                                        null=True,
                                        blank=True)
@@ -23,6 +26,9 @@ class Title(models.Model):
 
     class Meta:
         ordering = ['-year']
+
+    class Meta:
+        ordering = ('-category', '-id')
 
     def __str__(self):
         return self.name
