@@ -1,8 +1,7 @@
 import os
-import random
-import string
 
 from django.core.mail import send_mail
+from django.utils.crypto import get_random_string
 from dotenv import load_dotenv
 from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action, api_view
@@ -14,11 +13,6 @@ from .models import Buffer, User
 from .permissions import IsAdministrator
 from .serializers import UserSerializer
 
-
-def code_gen(size=8, chars=string.ascii_uppercase + string.digits):
-    return ''.join(random.choice(chars) for _ in range(size))
-
-
 load_dotenv()
 
 
@@ -26,7 +20,7 @@ load_dotenv()
 def send_code(request):
     email_from = os.getenv('EMAIL_HOST_USER')
     email_to = request.data.get('email')
-    code = code_gen()
+    code = get_random_string(length=8)
     try:
         current_user = Buffer.objects.get(email=email_to)
         current_user.code = code
