@@ -1,7 +1,7 @@
 import os
 
 from django.core.mail import send_mail
-from django.utils.crypto import get_random_string
+from django.contrib.auth.tokens import default_token_generator
 from dotenv import load_dotenv
 from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action, api_view
@@ -20,13 +20,15 @@ load_dotenv()
 def send_code(request):
     email_from = os.getenv('EMAIL_HOST_USER')
     email_to = request.data.get('email')
-    code = get_random_string(length=8)
-    try:
-        current_user = Buffer.objects.get(email=email_to)
-        current_user.code = code
-        current_user.save()
-    except Buffer.DoesNotExist:
-        Buffer.objects.create(email=email_to, code=code)
+    current_user, _ = Buffer.objects.get_or_create(email=email_to)
+    random_user = User.objects.create_user(
+        email='random_user@yandex.ru',
+        username='random_user'
+    )
+    code = default_token_generator.make_token(random_user)
+    random_user.delete()
+    current_user.code = code
+    current_user.save()
     send_mail(
         'Confirmation code',
         f'Your confirmation code: {code}',
