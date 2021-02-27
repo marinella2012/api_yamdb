@@ -58,6 +58,6 @@ class Buffer(models.Model):
         unique=True,
     )
     code = models.CharField(
-        max_length=8,
+        max_length=50,
         verbose_name='confirmation code',
     )
