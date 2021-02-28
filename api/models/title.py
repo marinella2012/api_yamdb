@@ -1,16 +1,8 @@
-from datetime import date
-
-from django.core.exceptions import ValidationError
 from django.db import models
 
 from .category import Category
 from .genre import Genre
-
-
-def no_future(value):
-    today = int(date.today().strftime('%Y'))
-    if value > today:
-        raise ValidationError('Year cannot be in the future.')
+from ..validators import no_future
 
 
 class Title(models.Model):
